@@ -1,0 +1,22 @@
+{
+  "name": "db-pais",
+  "version": "1.0.0",
+  "description": "db pais",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAYKOL-DEV/db-pais.git"
+  },
+  "keywords": [
+    "db-pais"
+  ],
+  "author": "miguel",
+  "license": "ISC",  
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.6.1"
+  }
+}
