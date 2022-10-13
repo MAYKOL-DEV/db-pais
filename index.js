@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const modelCity = require("./models/City");
 const modelCountry = require("./models/Country");
+const modelPerson = require("./models/Person");
 
 const app = express();
 
@@ -13,7 +14,7 @@ mongoose
   .then(() => {
     console.log("connect");
   })
-  .catch(() => {
+  .catch((error) => {
     console.log("error");
   });
 
@@ -112,6 +113,121 @@ app.post("/api/country", async (req, res) => {
     return res.status(400).json({
       doc: null,
       success: false,
+    });
+  }
+});
+
+app.put("/api/country/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, language, extension, currency, code, active } = req.body;
+
+  try {
+    const country = await modelCountry.findByIdAndUpdate(
+      id,
+      { name, language, extension, currency, code, active },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      doc: country,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      doc: null,
+      success: false,
+    });
+  }
+});
+
+app.post("/api/person", async (req, res) => {
+  const { name, phone, street, city } = req.body;
+  try {
+    const person = await modelPerson.create({ name, phone, street, city });
+    return res.status(200).json({
+      person: person,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      person: null,
+      success: false,
+    });
+  }
+});
+
+app.put("/api/person/:personName", async (req, res) => {
+  const { personName } = req.params;
+  const { phone } = req.body;
+
+  try {
+    const person = await modelPerson.findOneAndUpdate(
+      { name: personName },
+      { phone },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      person: person,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      person: null,
+      success: false,
+    });
+  }
+});
+
+app.get("/api/persons", async (req, res) => {
+  try {
+    const persons = await modelPerson.find({});
+
+    return res.status(200).json({
+      persons: persons,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      persons: [],
+      success: false,
+      message: "Error",
+    });
+  }
+});
+
+app.get("/api/person-count", async (req, res) => {
+  try {
+    const personCount = await modelPerson.countDocuments();
+
+    return res.status(200).json({
+      count: personCount,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      count: 0,
+      success: false,
+      message: "Error",
+    });
+  }
+});
+
+app.get("/api/person/:name", async (req, res) => {
+  const { name } = req.params;
+  try {
+    const person = await modelPerson.findOne({ name });
+
+    return res.status(200).json({
+      person: person,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      person: {},
+      success: false,
+      message: "Error",
     });
   }
 });
