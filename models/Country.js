@@ -12,6 +12,7 @@ const country = new mongoose.Schema({
   },
   extension: {
     type: Number,
+    // type: Schema.Types.Decimal128,
     require: true,
   },
   currency: {
@@ -21,7 +22,12 @@ const country = new mongoose.Schema({
   code: {
     type: Number,
     require: true,
-  }, 
+  },
+  active: {
+    type: Boolean,
+    require: false,
+    default: true,
+  },
 });
 
 const modelColor = mongoose.model("countries", country);
